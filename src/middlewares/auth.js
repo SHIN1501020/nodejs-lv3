@@ -18,7 +18,7 @@ export default async function (req, res, next) {
     if(!Authorization) throw new CustomError(403, Message.LOGIN_REQUIRED)
 
     const [tokenType, token] = Authorization.split(" ");
-    if (tokenType !== "Bearer") throw CustomError(403, Message.COOKIE_ERROR_OCCURRED)
+    if (tokenType !== "Bearer") throw new CustomError(403, Message.COOKIE_ERROR_OCCURRED)
 
     const decodedToken = jwt.verify(token, process.env.SECRET_KEY); //! 비밀키 .env
     const userId = decodedToken.userId;
@@ -29,7 +29,7 @@ export default async function (req, res, next) {
 
     if (!user) {
       res.clearCookie("Authorization");
-      throw CustomError(403, Message.COOKIE_ERROR_OCCURRED)
+      throw new CustomError(403, Message.COOKIE_ERROR_OCCURRED)
       // throw new Error("토큰 사용자가 존재하지 않습니다.");
     }
 
