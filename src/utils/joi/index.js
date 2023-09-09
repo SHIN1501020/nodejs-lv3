@@ -33,7 +33,7 @@ class ValidSchema {
     nickname: Joi.string().pattern(this.re_nickname).empty().required(),
     password: Joi.string().pattern(this.re_password).empty().required(),
     confirm: Joi.valid(Joi.ref("password")).empty().required(),
-  }).error((err)=>console.log(err)).custom((value, helpers)=>{
+  }).custom((value, helpers)=>{
     //* 비밀번호에 닉네임이 포함된 경우 처리
     //? 바로 에러 메시지 전달해주는 방식
     return value.password.includes(value.nickname) ? helpers.message({ custom : Message.PASSWORD_INCLUDED_NICKNAM}) : value
