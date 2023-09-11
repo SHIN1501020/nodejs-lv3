@@ -19,12 +19,6 @@ const router = express.Router();
 
 /**
  * 댓글 생성 API - POST '/posts/:postId/comments'
- *
- * @async
- * @function
- * @param {object} req - 요청 객체
- * @param {object} res - 응답 객체
- * @param {function} next - next 미들웨어 함수
  */
 router.post("/:postId/comments", authMiddleware, validateBody(ValidSchema.comment), asyncHandler(async (req, res) => {
     const { postId } = req.params;
@@ -53,12 +47,6 @@ router.post("/:postId/comments", authMiddleware, validateBody(ValidSchema.commen
 
 /**
  * 댓글 조회 API - GET '/posts/:postId/comments'
- *
- * @async
- * @function
- * @param {object} req - 요청 객체
- * @param {object} res - 응답 객체
- * @param {function} next - next 미들웨어 함수
  */
 router.get("/:postId/comments", asyncHandler(async (req, res) => {
     const { postId } = req.params;
@@ -98,12 +86,6 @@ router.get("/:postId/comments", asyncHandler(async (req, res) => {
 
 /**
  * 댓글 수정 API - GET '/posts/:postId/:commentId'
- *
- * @async
- * @function
- * @param {object} req - 요청 객체
- * @param {object} res - 응답 객체
- * @param {function} next - next 미들웨어 함수
  */
 router.put("/:postId/:commentId", authMiddleware, validateBody(ValidSchema.comment), asyncHandler(async (req, res) => {
     const { postId, commentId } = req.params;
@@ -144,12 +126,6 @@ router.put("/:postId/:commentId", authMiddleware, validateBody(ValidSchema.comme
 
 /**
  * 댓글 삭제 API - DELETE '/posts/:postId/:commentId'
- *
- * @async
- * @function
- * @param {object} req - 요청 객체
- * @param {object} res - 응답 객체
- * @param {function} next - next 미들웨어 함수
  */
 router.delete("/:postId/:commentId", authMiddleware, asyncHandler(async (req, res) => {
     const { postId, commentId } = req.params;

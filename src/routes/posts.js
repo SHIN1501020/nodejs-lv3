@@ -19,12 +19,6 @@ const router = express.Router();
 
 /**
  * 게시글 생성 API - POST '/posts'
- *
- * @async
- * @function
- * @param {object} req - 요청 객체
- * @param {object} res - 응답 객체
- * @param {function} next - next 미들웨어 함수
  */
 router.post("/", authMiddleware, validateBody(ValidSchema.post), asyncHandler(async (req, res) => {
     const { userId } = req.user;    
@@ -44,12 +38,6 @@ router.post("/", authMiddleware, validateBody(ValidSchema.post), asyncHandler(as
 
 /**
  * 게시글 조회 API - GET '/posts'
- *
- * @async
- * @function
- * @param {object} req - 요청 객체
- * @param {object} res - 응답 객체
- * @param {function} next - next 미들웨어 함수
  */
 router.get("/", asyncHandler(async (req, res) => {
     const posts = await prisma.posts.findMany({
@@ -75,12 +63,6 @@ router.get("/", asyncHandler(async (req, res) => {
 
 /**
  * 게시글 상세 조회 API - GET '/posts/:postId'
- *
- * @async
- * @function
- * @param {object} req - 요청 객체
- * @param {object} res - 응답 객체
- * @param {function} next - next 미들웨어 함수
  */
 router.get("/:postId", asyncHandler(async (req, res) => {
     const { postId } = req.params;
@@ -107,12 +89,6 @@ router.get("/:postId", asyncHandler(async (req, res) => {
 
 /**
  * 게시글 수정 API - PUT '/posts/:postId'
- *
- * @async
- * @function
- * @param {object} req - 요청 객체
- * @param {object} res - 응답 객체
- * @param {function} next - next 미들웨어 함수
  */
 router.put("/:postId", authMiddleware, validateBody(ValidSchema.post), asyncHandler(async (req, res) => {
     const { postId } = req.params;
@@ -144,12 +120,6 @@ router.put("/:postId", authMiddleware, validateBody(ValidSchema.post), asyncHand
 
 /**
  * 게시글 삭제 API - DELETE '/posts/:postId'
- *
- * @async
- * @function
- * @param {object} req - 요청 객체
- * @param {object} res - 응답 객체
- * @param {function} next - next 미들웨어 함수
  */
 router.delete("/:postId", authMiddleware, asyncHandler(async (req, res) => {
     const { postId } = req.params;
