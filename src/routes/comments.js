@@ -26,8 +26,7 @@ const router = express.Router();
  * @param {object} res - 응답 객체
  * @param {function} next - next 미들웨어 함수
  */
-router.post(
-  "/:postId/comments", authMiddleware, validateBody(ValidSchema.comment), asyncHandler(async (req, res) => {
+router.post("/:postId/comments", authMiddleware, validateBody(ValidSchema.comment), asyncHandler(async (req, res) => {
     const { postId } = req.params;
     const { userId } = req.user;
     const { comment } = req.body;

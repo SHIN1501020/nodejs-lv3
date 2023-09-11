@@ -1,12 +1,14 @@
+import { CustomError } from "../utils/errors/CustomError.js";
+
 /**
- * 
- * @param {Joi.ObjectSchema} schema 
+ *
+ * @param {Joi.ObjectSchema} schema
  * @returns {function} - 미들웨어 함수 반환
  */
 export const validateBody = (schema) => {
   /**
    * 미들웨어 함수
-   * 
+   *
    * @async
    * @function
    * @param {object} req - 요청 객체
@@ -20,7 +22,7 @@ export const validateBody = (schema) => {
       req.body = validatedBody;
       next();
     } catch (err) {
-      next(err);
+        next(err);
     }
   };
 };
