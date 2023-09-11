@@ -20,7 +20,7 @@ const router = express.Router();
 /**
  * 댓글 생성 API - POST '/posts/:postId/comments'
  */
-router.post("/:postId/comments", authMiddleware, validateBody(ValidSchema.comment), asyncHandler(async (req, res) => {
+router.post("/:postId/comments", authMiddleware, validateBody(ValidSchema.comment), asyncHandler(async (req, res, next) => {
     const { postId } = req.params;
     const { userId } = req.user;
     const { comment } = req.body;
@@ -48,7 +48,7 @@ router.post("/:postId/comments", authMiddleware, validateBody(ValidSchema.commen
 /**
  * 댓글 조회 API - GET '/posts/:postId/comments'
  */
-router.get("/:postId/comments", asyncHandler(async (req, res) => {
+router.get("/:postId/comments", asyncHandler(async (req, res, next) => {
     const { postId } = req.params;
 
     const post = await prisma.posts.findFirst({
@@ -85,9 +85,9 @@ router.get("/:postId/comments", asyncHandler(async (req, res) => {
 );
 
 /**
- * 댓글 수정 API - GET '/posts/:postId/:commentId'
+ * 댓글 수정 API - GET '/posts/:postId/comments/:commentId'
  */
-router.put("/:postId/:commentId", authMiddleware, validateBody(ValidSchema.comment), asyncHandler(async (req, res) => {
+router.put("/:postId/comments/:commentId", authMiddleware, validateBody(ValidSchema.comment), asyncHandler(async (req, res, next) => {
     const { postId, commentId } = req.params;
     const { userId } = req.user;
     const { comment } = req.body;
@@ -125,9 +125,9 @@ router.put("/:postId/:commentId", authMiddleware, validateBody(ValidSchema.comme
 );
 
 /**
- * 댓글 삭제 API - DELETE '/posts/:postId/:commentId'
+ * 댓글 삭제 API - DELETE '/posts/:postId/comments/:commentId'
  */
-router.delete("/:postId/:commentId", authMiddleware, asyncHandler(async (req, res) => {
+router.delete("/:postId/comments/:commentId", authMiddleware, asyncHandler(async (req, res, next) => {
     const { postId, commentId } = req.params;
     const { userId } = req.user;
 

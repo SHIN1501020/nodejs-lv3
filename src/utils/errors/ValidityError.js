@@ -8,11 +8,6 @@ import { CustomError } from "./CustomError.js";
  * @namespace VALIDITY_ERROR
  */
 export class VALIDITY_ERROR extends CustomError {
-    /**
-     * @constructor
-     * @param {number} status - HTTP 상태 코드 
-     * @param {string} message - 에러 메시지
-     */
     constructor(message) {
         super(412, message);
       }

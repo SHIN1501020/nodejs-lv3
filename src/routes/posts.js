@@ -20,7 +20,7 @@ const router = express.Router();
 /**
  * 게시글 생성 API - POST '/posts'
  */
-router.post("/", authMiddleware, validateBody(ValidSchema.post), asyncHandler(async (req, res) => {
+router.post("/", authMiddleware, validateBody(ValidSchema.post), asyncHandler(async (req, res, next) => {
     const { userId } = req.user;    
     const { title, content } = req.body;
 
@@ -39,7 +39,7 @@ router.post("/", authMiddleware, validateBody(ValidSchema.post), asyncHandler(as
 /**
  * 게시글 조회 API - GET '/posts'
  */
-router.get("/", asyncHandler(async (req, res) => {
+router.get("/", asyncHandler(async (req, res, next) => {
     const posts = await prisma.posts.findMany({
       orderBy: {
         createdAt: "desc",
@@ -64,7 +64,7 @@ router.get("/", asyncHandler(async (req, res) => {
 /**
  * 게시글 상세 조회 API - GET '/posts/:postId'
  */
-router.get("/:postId", asyncHandler(async (req, res) => {
+router.get("/:postId", asyncHandler(async (req, res, next) => {
     const { postId } = req.params;
 
     const currentPost = await prisma.posts.findFirst({
@@ -90,7 +90,7 @@ router.get("/:postId", asyncHandler(async (req, res) => {
 /**
  * 게시글 수정 API - PUT '/posts/:postId'
  */
-router.put("/:postId", authMiddleware, validateBody(ValidSchema.post), asyncHandler(async (req, res) => {
+router.put("/:postId", authMiddleware, validateBody(ValidSchema.post), asyncHandler(async (req, res, next) => {
     const { postId } = req.params;
     const { userId } = req.user;
     const { title, content } = req.body;
@@ -121,7 +121,7 @@ router.put("/:postId", authMiddleware, validateBody(ValidSchema.post), asyncHand
 /**
  * 게시글 삭제 API - DELETE '/posts/:postId'
  */
-router.delete("/:postId", authMiddleware, asyncHandler(async (req, res) => {
+router.delete("/:postId", authMiddleware, asyncHandler(async (req, res, next) => {
     const { postId } = req.params;
     const { userId } = req.user;
 
