@@ -1,14 +1,17 @@
-import { CustomError } from "../utils/errors/CustomError.js";
-
+import  { BAD_REQUEST } from "../utils/errors/BadRequest.js"
+import { VALIDITY_ERROR } from "../utils/errors/ValidityError.js"
 /**
- *
- * @param {Joi.ObjectSchema} schema
+ * 유효성 검사를 확인해주는 함수
+ * 
+ * @function
+ * @param {Joi.ObjectSchema} schema 
  * @returns {function} - 미들웨어 함수 반환
+ * @namespace validateBody
  */
 export const validateBody = (schema) => {
   /**
    * 미들웨어 함수
-   *
+   * 
    * @async
    * @function
    * @param {object} req - 요청 객체
@@ -22,7 +25,9 @@ export const validateBody = (schema) => {
       req.body = validatedBody;
       next();
     } catch (err) {
-        next(err);
+        const { type, message } = err.details[0]
+        if(type === 'any.required') return next(new BAD_REQUEST(message)); // Bad Request error
+        return next(new VALIDITY_ERROR(message)) // 유효성 검사 에러
     }
   };
 };

@@ -1,5 +1,4 @@
 import Joi from "joi";
-import { Message } from "../../constants/index.js";
 
 /**
  * Joi(유효성 검사 라이브러리) 스키마 구성 클래스
@@ -10,10 +9,22 @@ import { Message } from "../../constants/index.js";
  * @see {@link https://joi.dev/api/?v=17.9.1}
  * @namespace ValidSchema
  */
-class ValidSchema {  
-  // 정규표현식
-  re_nickname = /^[a-zA-Z0-9]{3,10}$/;
-  re_password = /^[a-zA-Z0-9]{4,30}$/;
+class ValidSchema {
+  joi = Joi.defaults((schema)=> schema.options({
+    messages: {
+        'any.required' : '데이터 형식이 올바르지 않습니다.',
+        'string.pattern.base': '{#label} 형식이 일치하지 않습니다.',
+        'any.only': '비밀번호가 일치하지 않습니다.',
+        'string.empty': '{#label} 내용을 입력해주세요.'
+      },
+      errors:{
+        wrap : {
+          label: false //라벨에서 "" 출력되는거 제거
+        }
+      }
+  }));  
+
+
   /**
    * @typedef {object} SchemaSignup
    * @property {string} nickname - 닉네임
@@ -29,17 +40,18 @@ class ValidSchema {
    * 비밀번호 확인은 비밀번호와 동일해야합니다.
    * @member {Joi.ObjectSchema<SchemaSignup>} signup
    */
-  signup = Joi.object({
-    nickname: Joi.string().pattern(this.re_nickname).empty().required(),
-    password: Joi.string().pattern(this.re_password).empty().required(),
-    confirm: Joi.valid(Joi.ref("password")).empty().required(),
+  signup = this.joi.object({
+    nickname: this.joi.string().pattern(/^[a-zA-Z0-9]{3,10}$/).empty('').allow('').required().label("닉네임"),
+    password: this.joi.string().pattern(/^[a-zA-Z0-9]{4,30}$/).empty('').allow('').required().label("비밀번호"),
+    confirm: this.joi.valid(this.joi.ref("password")).empty('').allow('').required().label("비밀번호"),
   }).custom((value, helpers)=>{
     //* 비밀번호에 닉네임이 포함된 경우 처리
     //? 바로 에러 메시지 전달해주는 방식
-    return value.password.includes(value.nickname) ? helpers.message({ custom : Message.PASSWORD_INCLUDED_NICKNAM}) : value
+    return value.password.includes(value.nickname) ? helpers.message({ custom : "패스워드에 닉네임이 포함되어 있습니다."}) : value
     // error.details.context label, key에 객체가 들어가는 상태 : object에 custom 사용해서 그런 것 같다.
     //return value.password.includes(value.nickname) ? helpers.error("any.invalid", { value }, "PASSWORDINCLUDEDNICKNAM") : value
   });
+
 
   /**
    * @typedef {object} SchemaPost
@@ -54,10 +66,11 @@ class ValidSchema {
    * 게시글 내용은 0-100 글자만 가능합니다.
    * @member {Joi.ObjectSchema<SchemaPost>} post
    */
-  post = Joi.object({
-    title: Joi.string().min(1).max(20).empty().required(),
-    content: Joi.string().min(0).max(100).required(),
+  post = this.joi.object({
+    title: this.joi.string().pattern(/^.{1,10}$/).empty('').allow('').required().label("제목"),
+    content: this.joi.string().pattern(/^.{0,50}$/).empty('').allow('').required().label("내용"),
   });
+
 
   /**
    * @typedef {object} SchemaComment
@@ -71,8 +84,8 @@ class ValidSchema {
    * 댓글은 1-50 글자만 가능합니다. (빈 내용 시 내용을 입력받아야한다.)
    * @member {Joi.ObjectSchema<SchemaComment>} comment
    */
-  comment = Joi.object({
-    comment: Joi.string().min(1).max(50).empty().required(),
+  comment = this.joi.object({
+    comment: this.joi.string().pattern(/^.{1,20}$/).required().label("댓글"),
   });
 }
 //? export 방식
